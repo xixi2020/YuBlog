@@ -6,7 +6,7 @@ import com.xiyu.enms.AppHttpCodeEnum;
 
 
 import java.io.Serializable;
-
+//使用 Jackson 进行 JSON 的序列化时，这个注解可以告诉 Jackson 库只序列化那些非 null 值的字段。
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseResult<T> implements Serializable {
     private Integer code;
