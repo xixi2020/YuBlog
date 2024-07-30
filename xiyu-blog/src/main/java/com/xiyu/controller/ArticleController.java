@@ -30,4 +30,5 @@ public class ArticleController{
     public ResponseResult hotArticleList(){
         return  hotArticleListService.hotArticleList();
     }
+
 }
