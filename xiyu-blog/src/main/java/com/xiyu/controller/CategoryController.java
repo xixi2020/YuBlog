@@ -14,6 +14,10 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    /**
+     * 查询分类名称
+     * @return
+     */
     @GetMapping("/getCategoryList")
     public ResponseResult getCategoryList(){
         return categoryService.getCategoryList();
