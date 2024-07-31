@@ -7,10 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.experimental.Accessors;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("sg_category")
+//返回实体类类型
+@Accessors(chain = true)
 /**
  * 分类表(Category)实体类
  *

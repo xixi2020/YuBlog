@@ -6,7 +6,7 @@ import com.xiyu.domain.entity.Article;
 import org.springframework.stereotype.Service;
 
 public interface ArticleService extends IService<Article> {
-    ResponseResult<Article> articleList(Integer pageNum, Integer pageSize, Long categoryIds);
+    ResponseResult<Article> articleList(Integer pageNum, Integer pageSize, Long categoryId);
 
     ResponseResult hotArticleList();
 }

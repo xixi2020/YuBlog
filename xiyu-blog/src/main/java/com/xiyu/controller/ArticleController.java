@@ -37,16 +37,16 @@ public class ArticleController{
 
 
     /**
-     * 分页查询文章
+     * 分页查询文章,如果直接是从请求体当中得到的比如articleList/1,就要加@param注解
      * @param pageNum 页数
      * @param pageSize 每页查询条数
-     * @param categoryIds 分类类型
+     * @param categoryId 分类类型
      * @return
      */
-    @GetMapping("")
-    public ResponseResult<Article> articleList(Integer pageNum, Integer pageSize, Long categoryIds){
+    @GetMapping("/articleList")
+    public ResponseResult<Article> articleList(Integer pageNum, Integer pageSize, Long categoryId){
 
-        return articleService.articleList(pageNum, pageSize,categoryIds);
+        return articleService.articleList(pageNum, pageSize,categoryId);
 
     }
 }
