@@ -11,6 +11,7 @@ import com.xiyu.mapper.ArticleMapper;
 import com.xiyu.service.ArticleService;
 import com.xiyu.service.CategoryService;
 import com.xiyu.utils.BeanCopyUtils;
+import com.xiyu.vo.ArticleDetailVo;
 import com.xiyu.vo.ArticleListVo;
 import com.xiyu.vo.HotArticleVo;
 import com.xiyu.vo.PageVo;
@@ -82,6 +83,27 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<HotArticleVo> hotArticleVos = BeanCopyUtils.copyList(pageRecords, HotArticleVo.class);
 
         return ResponseResult.okResult(hotArticleVos);
+    }
+
+    /**
+     * 文章详情
+     * @param id
+     * @return
+     */
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+        //根据id查询文章
+        Article article = getById(id);
+
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+        //根据分类id查找分类名
+        Category category = categoryService.getById(articleDetailVo.getCategoryId());
+        if (category != null){
+            //防止category.getName()空指针
+            articleDetailVo.setCategoryName(category.getName());
+        }
+
+        return ResponseResult.okResult(articleDetailVo);
     }
 
 
