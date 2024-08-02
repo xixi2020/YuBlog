@@ -21,7 +21,7 @@ import java.util.Objects;
 @Service
 public class BlogLoginServiceImpl implements BlogLoginService {
     @Autowired
-    //定义了认证Authentication的方法
+    //定义了认证Authentication的方法,认证用户名是否正确
     private AuthenticationManager authenticationManager;
 
     @Autowired
