@@ -43,8 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 注销登录需要认证：需要携带token信息
                 .antMatchers("/logout").authenticated()
                 .antMatchers("/comment/addComment").authenticated()
+                .antMatchers("/user/userInfo").authenticated()
                 // 测试：配置需要认证之后才可以访问
-                .antMatchers("/link/getAllLink").authenticated()
+//                .antMatchers("/link/getAllLink").authenticated()
                 // 除上面外的所有请求全部不需要认证即可访问
                 .anyRequest().permitAll();
 
