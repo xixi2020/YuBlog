@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiyu.domain.ResponseResult;
 import com.xiyu.domain.entity.Comment;
+import com.xiyu.enms.AppHttpCodeEnum;
+import com.xiyu.exception.SystemException;
 import com.xiyu.mapper.CommentMapper;
 import com.xiyu.service.ArticleService;
 import com.xiyu.service.CommentService;
@@ -13,6 +15,7 @@ import com.xiyu.vo.CommentVo;
 import com.xiyu.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -39,6 +42,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
         //返回分页以及评论条数
         return ResponseResult.okResult(new PageVo(vos ,page.getTotal()));
+    }
+
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        //评论不可为空
+        if (!StringUtils.hasText(comment.getContent())){
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        save(comment);
+        return ResponseResult.okResult();
     }
 
     /**
