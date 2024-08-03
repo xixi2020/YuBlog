@@ -10,6 +10,7 @@ import com.xiyu.service.ArticleService;
 import com.xiyu.service.CommentService;
 import com.xiyu.utils.BeanCopyUtils;
 import com.xiyu.vo.CommentVo;
+import com.xiyu.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,38 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //进行分页
         Page page = new Page(pageNum, pageSize);
         page(page, queryWrapper);
-        List records = page.getRecords();
+        List<CommentVo> vos = toCommentList(page.getRecords());
+        
+        //查询子评论
+        for (CommentVo vo : vos) {
+            List<CommentVo> children = getChildren(vo.getId());
+            vo.setChildren(children);
+        }
+        //返回分页以及评论条数
+        return ResponseResult.okResult(new PageVo(vos ,page.getTotal()));
+    }
+
+    /**
+     * 查询根评论的子评论
+     * @param id 根评论id
+     * @return
+     */
+    private List<CommentVo> getChildren(Long id) {
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Comment::getRootId, id);
+        queryWrapper.orderByDesc(Comment::getCreateTime);
+        List<Comment> commentList = list(queryWrapper);
+        //
+        List<CommentVo> vos = toCommentList(commentList);
+        return vos;
+    }
+
+    /**
+     * 查询未被他人回复的评论并且转换格式
+     * @param records
+     * @return
+     */
+    private List<CommentVo> toCommentList(List<Comment> records) {
         //格式转换
         List<CommentVo> commentvos = BeanCopyUtils.copyList(records, CommentVo.class);
         //还要获取评论人的名称
@@ -42,6 +74,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 vo.setToCommentUserName(userService.getById(vo.getToCommentUserId()).getNickName());
             }
         }
-        return ResponseResult.okResult(commentvos);
+        return commentvos;
+
     }
 }
