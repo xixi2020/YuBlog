@@ -3,12 +3,12 @@ package com.xiyu.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiyu.constants.SystemConstants;
 import com.xiyu.domain.ResponseResult;
 import com.xiyu.domain.entity.Comment;
 import com.xiyu.enms.AppHttpCodeEnum;
 import com.xiyu.exception.SystemException;
 import com.xiyu.mapper.CommentMapper;
-import com.xiyu.service.ArticleService;
 import com.xiyu.service.CommentService;
 import com.xiyu.utils.BeanCopyUtils;
 import com.xiyu.vo.CommentVo;
@@ -24,15 +24,21 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Autowired
     UserService userService;
     @Override
-    public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize) {
         //根据id查评论
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getArticleId, articleId);
+
+        //对articleId进行判断:必须commentType为0的时候才增加articleId的判断
+        queryWrapper.eq(SystemConstants.ARTICLE_COMMENT.equals(commentType),Comment::getArticleId, articleId);
         //先查出来根评论,这里先不进行子评论的遍历
         queryWrapper.eq(Comment::getRootId, -1);
+        //评论类型
+        queryWrapper.eq(Comment::getType, commentType);
         //进行分页
         Page page = new Page(pageNum, pageSize);
         page(page, queryWrapper);
+
+        //转换为vo格式
         List<CommentVo> vos = toCommentList(page.getRecords());
         
         //查询子评论
