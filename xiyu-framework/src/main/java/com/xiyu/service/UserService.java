@@ -6,4 +6,8 @@ import com.xiyu.domain.entity.User;
 
 public interface UserService extends IService<User> {
     ResponseResult userInfo();
+
+    ResponseResult updateUserInfo(User user);
+
+    ResponseResult register(User user);
 }
