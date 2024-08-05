@@ -11,6 +11,7 @@ import com.xiyu.mapper.ArticleMapper;
 import com.xiyu.service.ArticleService;
 import com.xiyu.service.CategoryService;
 import com.xiyu.utils.BeanCopyUtils;
+import com.xiyu.utils.RedisCache;
 import com.xiyu.vo.ArticleDetailVo;
 import com.xiyu.vo.ArticleListVo;
 import com.xiyu.vo.HotArticleVo;
@@ -27,6 +28,9 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private RedisCache redisCache;
 
     /**
      * 分页查询文章①只能查询正式发布的文章 ②置顶的文章要显示在最前面
@@ -95,6 +99,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //根据id查询文章
         Article article = getById(id);
 
+        //从redis里面获取浏览量
+        Integer viewCount = redisCache.getCacheMapValue("article:viewCount", id.toString());
+        article.setViewCount(viewCount.longValue());
+
         ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
         //根据分类id查找分类名
         Category category = categoryService.getById(articleDetailVo.getCategoryId());
@@ -104,6 +112,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         return ResponseResult.okResult(articleDetailVo);
+    }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        redisCache.incrementCacheMapValue("article:viewCount",id.toString(),1);
+
+        return ResponseResult.okResult();
     }
 
 
