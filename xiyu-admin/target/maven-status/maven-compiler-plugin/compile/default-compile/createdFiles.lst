@@ -1,0 +1,4 @@
+com\xiyu\controller\TagController.class
+com\xiyu\config\SecurityConfig.class
+com\xiyu\filter\JwtAuthenticationTokenFilter.class
+com\xiyu\BlogAdminApplication.class
