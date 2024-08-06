@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * 后台的jwt验证
+ * jwt生成token
  */
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
