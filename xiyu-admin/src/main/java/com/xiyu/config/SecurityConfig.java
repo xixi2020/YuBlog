@@ -13,6 +13,10 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * 自定义过滤器
+ * 这个过滤器会去获取请求头中的token，对token进行解析取出其中的userid。
+ */
 @Configuration
 //WebSecurityConfigurerAdapter是Security官方提供的类
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

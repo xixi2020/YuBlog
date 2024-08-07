@@ -6,7 +6,6 @@ import com.xiyu.domain.entity.User;
 import com.xiyu.service.SystemLoginService;
 import com.xiyu.utils.JwtUtil;
 import com.xiyu.utils.RedisCache;
-import jdk.internal.org.objectweb.asm.Handle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,8 +40,10 @@ public class SystemLoginServiceImpl implements SystemLoginService {
         String jwt = JwtUtil.createJWT(userId);
         //将token放在redis中
         redisCache.setCacheObject("login:"+userId, loginUser);
+        HashMap<Object, Object> hashMap = new HashMap<>();
+        hashMap.put("token", jwt);
 
         //把token返回
-        return ResponseResult.okResult(new HashMap<>().put("token", jwt));
+        return ResponseResult.okResult(hashMap);
     }
 }
