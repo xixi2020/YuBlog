@@ -6,6 +6,7 @@ import com.xiyu.domain.entity.User;
 import com.xiyu.service.SystemLoginService;
 import com.xiyu.utils.JwtUtil;
 import com.xiyu.utils.RedisCache;
+import com.xiyu.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,5 +46,14 @@ public class SystemLoginServiceImpl implements SystemLoginService {
 
         //把token返回
         return ResponseResult.okResult(hashMap);
+    }
+
+    //退出登录
+    @Override
+    public ResponseResult logout() {
+        //获取用户信息
+        Long userId = SecurityUtils.getUserId();
+        redisCache.deleteObject("login:"+userId);
+        return ResponseResult.okResult();
     }
 }

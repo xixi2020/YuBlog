@@ -2,15 +2,21 @@ package com.xiyu.domain.entity;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.experimental.Accessors;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("sys_menu")
+@Accessors(chain = true) //允许链式编程
 /**
  * 菜单权限表(SysMenu)实体类
  *
@@ -22,6 +28,7 @@ public class Menu{
     /**
      * 菜单ID
      */
+    @TableId
     private Long id;
     /**
      * 菜单名称
@@ -89,6 +96,9 @@ public class Menu{
     private String remark;
     
     private String delFlag;
+    //由于数据库没有children字段，所以我们要添加@TableField(exist = false)注解让mybatis在查表时不查询这个字段
+    @TableField(exist = false)
+    private List<Menu> children;
 
 
 }

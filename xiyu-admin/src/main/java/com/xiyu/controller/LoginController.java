@@ -2,16 +2,17 @@ package com.xiyu.controller;
 
 import com.xiyu.domain.ResponseResult;
 import com.xiyu.domain.entity.LoginUser;
+import com.xiyu.domain.entity.Menu;
 import com.xiyu.domain.entity.User;
 import com.xiyu.enms.AppHttpCodeEnum;
 import com.xiyu.exception.SystemException;
 import com.xiyu.service.MenuService;
 import com.xiyu.service.RoleService;
 import com.xiyu.service.SystemLoginService;
-import com.xiyu.service.UserService;
 import com.xiyu.utils.BeanCopyUtils;
 import com.xiyu.utils.SecurityUtils;
 import com.xiyu.vo.AdminUserInfoVo;
+import com.xiyu.vo.RoutersVo;
 import com.xiyu.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -56,6 +57,18 @@ public class LoginController {
 
     }
 
+    @GetMapping("/getRouter")
+    public ResponseResult<RoutersVo> getRouter(){
+        //获取用户信息
+        Long userId = SecurityUtils.getUserId();
+        //获取权限菜单
+        List<Menu> menuList = menuService.selectRouterMenuTreeByUserId(userId);
+        return ResponseResult.okResult(menuList);
+    }
 
+    @PostMapping("/user/logout")
+    public ResponseResult logout(){
+        return systemLoginService.logout();
+    }
 
 }

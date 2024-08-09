@@ -1,4 +1,4 @@
-package com.xiyu.domain;
+package com.xiyu.domain.dto;
 
 import io.swagger.annotations.ApiModel;
 import lombok.NoArgsConstructor;

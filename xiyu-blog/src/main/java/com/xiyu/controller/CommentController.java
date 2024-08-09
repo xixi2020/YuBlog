@@ -3,7 +3,7 @@ package com.xiyu.controller;
 import com.xiyu.annotation.SystemLog;
 import com.xiyu.constants.SystemConstants;
 import com.xiyu.domain.ResponseResult;
-import com.xiyu.domain.addCommentDto;
+import com.xiyu.domain.dto.addCommentDto;
 import com.xiyu.domain.entity.Comment;
 import com.xiyu.service.CommentService;
 import com.xiyu.utils.BeanCopyUtils;

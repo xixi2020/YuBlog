@@ -505,7 +505,7 @@
               <option name="preName" value="sg_" />
               <option name="saveModelName" value="xiyu-admin" />
               <option name="savePackageName" value="" />
-              <option name="savePath" value="./xiyu-admin/src/main/java/com/xiyu" />
+              <option name="savePath" value="./xiyu-framework/src/main/java/com/xiyu/domain" />
               <option name="templateGroupName" value="Default" />
             </TableInfoDTO>
           </value>

@@ -6,4 +6,6 @@ import com.xiyu.domain.entity.User;
 
 public interface SystemLoginService {
     ResponseResult login(User user);
+
+    ResponseResult logout();
 }

@@ -39,4 +39,42 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<String> userIds = getBaseMapper().selectPermsByOtherUserId(id);
         return userIds;
     }
+
+    @Override
+    public List<Menu> selectRouterMenuTreeByUserId(Long userId) {
+        MenuMapper menuMapper = getBaseMapper();
+        List<Menu> menus = null;
+        //是超级管理员
+        if (userId.equals(1L)){
+            menus = menuMapper.selectAllRouterMenu();
+        }else {
+            //不是超级管理员，查询对应用户的路由信息(权限菜单)
+            menus = menuMapper.selectOtherRouterMenuTreeByUserId(userId);
+            //构成菜单树
+        }
+        List<Menu> menuTree = buildMenuTree(menus, 0L);
+        return menuTree;
+    }
+
+    /**
+     * 构建父子菜单
+     * @param menus
+     * @param parentId
+     * @return
+     */
+    private List<Menu> buildMenuTree(List<Menu> menus, long parentId) {
+        List<Menu> menuList = menus.stream()
+                .filter(menu -> menu.getParentId().equals(parentId))
+                .map(menu -> menu.setChildren(getChildren(menu, menus)))
+                .collect(Collectors.toList());
+        return menuList;
+    }
+
+    private List<Menu> getChildren(Menu menu, List<Menu> menus) {
+        List<Menu> childrenList = menus.stream()
+                .filter(m -> m.getParentId().equals(menu.getId()))
+                .map(m -> m.setChildren(getChildren(m, menus)))
+                .collect(Collectors.toList());
+        return childrenList;
+    }
 }
