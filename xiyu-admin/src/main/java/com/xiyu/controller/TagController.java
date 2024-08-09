@@ -8,8 +8,11 @@ import com.xiyu.domain.entity.Tag;
 import com.xiyu.service.TagService;
 import com.xiyu.utils.BeanCopyUtils;
 import com.xiyu.vo.PageVo;
+import com.xiyu.vo.TagVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/content/tag")
@@ -48,8 +51,7 @@ public class TagController {
      */
     @DeleteMapping("/{id}")
     public ResponseResult deleteTag(@PathVariable Long id){
-        tagService.removeById(id);
-        return ResponseResult.okResult();
+        return tagService.deleteTag(id);
     }
 
     /**
@@ -58,24 +60,27 @@ public class TagController {
      * @return
      */
     @GetMapping("/{id}")
-    public ResponseResult getInfo(@PathVariable(value = "id")Long id){
-        Tag tag = tagService.getById(id);
-        return ResponseResult.okResult(tag);
+    public ResponseResult getLableById(@PathVariable(value = "id")Long id){
+        return tagService.getLableById(id);
     }
 
     /**
-     * 修改标签
-     * @param editTagDto
+     * 修改标签:通过id
+     * @param tagVo
      * @return
      */
     @PutMapping
-    public ResponseResult editTag(@RequestBody EditTagDto editTagDto){
-        Tag tag = BeanCopyUtils.copyBean(editTagDto, Tag.class);
-        tagService.updateById(tag);
-        return ResponseResult.okResult();
+    public ResponseResult updateById(@RequestBody TagVo tagVo){
+        return tagService.myUpdateById(tagVo);
 
     }
 
+    //写博文：新增文章标签
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag(){
+        List<TagVo> list = tagService.listAllTag();
+        return ResponseResult.okResult(list);
+    }
 
 
 

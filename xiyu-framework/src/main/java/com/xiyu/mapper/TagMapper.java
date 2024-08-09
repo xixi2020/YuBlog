@@ -6,5 +6,5 @@ import io.lettuce.core.dynamic.annotation.Param;
 
 public interface TagMapper extends BaseMapper<Tag>{
     //删除标签，逻辑删除
-    int updateById(@Param("id")Long id, @Param("flag") int flag);
+    int myUpdateById(@Param("id")Long id, @Param("flag") int flag);
 }

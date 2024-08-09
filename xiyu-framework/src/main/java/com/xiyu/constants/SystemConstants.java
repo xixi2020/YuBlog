@@ -55,4 +55,8 @@ public class SystemConstants {
      * 权限类型，按钮
      */
     public static final String TYPE_BUTTON = "F";
+    /**
+     * 正常状态
+     */
+    public static final String NORMAL = "0";
 }

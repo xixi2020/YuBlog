@@ -10,13 +10,13 @@ import com.xiyu.mapper.CategoryMapper;
 import com.xiyu.service.ArticleService;
 import com.xiyu.service.CategoryService;
 import com.xiyu.utils.BeanCopyUtils;
+import com.xiyu.vo.AdminCategoryVo;
 import com.xiyu.vo.CategoryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +42,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         //封装在vo中
         List<CategoryVo> categoryVos = BeanCopyUtils.copyList(categories, CategoryVo.class);
         return ResponseResult.okResult(categoryVos);
+    }
+
+    @Override
+    public List<AdminCategoryVo> listAllCategory() {
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Category::getStatus, SystemConstants.NORMAL);
+        List<Category> categoryList = list(queryWrapper);
+        List<AdminCategoryVo> adminCategoryVos = BeanCopyUtils.copyList(categoryList, AdminCategoryVo.class);
+        return adminCategoryVos;
     }
 
 }
