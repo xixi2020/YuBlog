@@ -1,15 +1,23 @@
 package com.xiyu.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.fastjson.JSON;
 import com.xiyu.domain.ResponseResult;
 import com.xiyu.domain.dto.CategoryDto;
 import com.xiyu.domain.entity.Category;
+import com.xiyu.enms.AppHttpCodeEnum;
 import com.xiyu.service.CategoryService;
 import com.xiyu.utils.BeanCopyUtils;
+import com.xiyu.utils.WebUtils;
 import com.xiyu.vo.AdminCategoryVo;
+import com.xiyu.vo.ExcelCategoryVo;
 import com.xiyu.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -70,5 +78,27 @@ public class CategoryController {
     public ResponseResult edit(@RequestBody Category category){
         categoryService.updateById(category);
         return ResponseResult.okResult();
+    }
+
+    /**
+     * 把分类数据以excel的形式写出
+     * @param response
+     */
+    @GetMapping("/export")
+    public void export(HttpServletResponse response){
+        try {
+            WebUtils.setDownLoadHeader("分类.xlsx", response);
+            List<Category> categories = categoryService.list();
+            List<ExcelCategoryVo> excelCategoryVos = BeanCopyUtils.copyList(categories, ExcelCategoryVo.class);
+            EasyExcel.write(response.getOutputStream(), ExcelCategoryVo.class)
+                    .autoCloseStream(Boolean.FALSE)
+                    .sheet("文章分类")
+                    .doWrite(excelCategoryVos);
+        } catch (Exception e) {
+            //失败返回异常给前端
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+        }
+
     }
 }
