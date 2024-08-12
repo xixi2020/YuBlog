@@ -13,11 +13,9 @@ import com.xiyu.vo.AdminCategoryVo;
 import com.xiyu.vo.ExcelCategoryVo;
 import com.xiyu.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -84,6 +82,8 @@ public class CategoryController {
      * 把分类数据以excel的形式写出
      * @param response
      */
+    // ' @PreAuthorize("@ps.hasPermission('权限字符串')")'
+    @PreAuthorize("@ps.hasPermission('content:category:export')")
     @GetMapping("/export")
     public void export(HttpServletResponse response){
         try {

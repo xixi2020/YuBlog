@@ -55,14 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 对于登录接口 允许匿名访问
                 .antMatchers("/login").anonymous()
 
-//                //为方便测试查询个人信息，我们把查询个人信息的接口设置为需要登录才能访问
-//                .antMatchers("/user/userInfo").authenticated()
-//
-//                //退出登录的配置。如果'没登录'就调用'退出登录'，就会报错，报的错设置为'401 需要登录后操作'，也就是authenticated
-//                .antMatchers("/logout").authenticated()
+                //退出登录的配置。如果'没登录'就调用'退出登录'，就会报错，报的错设置为'401 需要登录后操作'，也就是authenticated
+                .antMatchers("/logout").authenticated()
 
-                // 除上面外的所有请求全部不需要认证即可访问
-                .anyRequest().permitAll();
+                // 除上面外的所有请求都需要认证才可以
+                .anyRequest().authenticated();
 
         //自定义异常处理器配置给Security
         http.exceptionHandling()
